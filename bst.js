@@ -96,6 +96,7 @@ export default class Tree {
     }
     return root;
   }
+  // Find and return a node
   find(data, root = this.root) {
     // Base case
     if (root === null || root.data === data) return root;
@@ -106,18 +107,24 @@ export default class Tree {
       return this.find(data, root.right);
     }
   }
+  // Traverse the tree breadth-first, use an array as a queue
   levelOrder(callback, queue = [this.root]) {
+    // Check that a valid function is provided as callback
     if (typeof callback !== "function") {
       throw new Error("Callback function is required");
     }
+    // Base Case
     if (root === null) return;
     if (queue.length === 0) return;
+    // Remove the first node in the queue
     let node = queue.shift();
     callback(node);
+    // Push new nodes in the queue
     if (node.left) queue.push(node.left);
     if (node.right) queue.push(node.right);
     this.levelOrder(callback, queue);
   }
+  // Iterative version of levelOrder
   levelOrderIterative(callback) {
     if (typeof callback !== "function") {
       throw new Error("Callback function is required");
@@ -132,4 +139,36 @@ export default class Tree {
       }
     }
   }
+  // Traverse the tree recursively in inorder and callback for the node
+  inOrder(callback, root = this.root) {
+    if (typeof callback !== "function") {
+      throw new Error("Callback function is required");
+    }
+    if (root === null) return;
+    this.inOrder(callback, root.left);
+    callback(root);
+    this.inOrder(callback, root.right);
+  }
+  // Traverse the tree recursively in preorder and callback for the node
+  preOrder(callback, root = this.root) {
+    if (typeof callback !== "function") {
+      throw new Error("Callback function is required");
+    }
+    if (root === null) return;
+    callback(root);
+    this.preOrder(callback, root.left);
+    this.preOrder(callback, root.right);
+  }
+  // Traverse the tree recursively in postorder and callback for the node
+  postOrder(callback, root = this.root) {
+    if (typeof callback !== "function") {
+      throw new Error("Callback function is required");
+    }
+    if (root === null) return;
+
+    this.postOrder(callback, root.left);
+    this.postOrder(callback, root.right);
+    callback(root);
+  }
+
 }
