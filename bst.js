@@ -118,4 +118,18 @@ export default class Tree {
     if (node.right) queue.push(node.right);
     this.levelOrder(callback, queue);
   }
+  levelOrderIterative(callback) {
+    if (typeof callback !== "function") {
+      throw new Error("Callback function is required");
+    }
+    let queue = [this.root];
+    while (queue.length > 0) {
+      let node = queue.shift();
+      if (node) {
+        callback(node);
+        if (node.left) queue.push(node.left);
+        if (node.right) queue.push(node.right);
+      }
+    }
+  }
 }
