@@ -170,5 +170,32 @@ export default class Tree {
     this.postOrder(callback, root.right);
     callback(root);
   }
-
+  // Traverse the tree down the node recursively and calculate the height of node
+  height(node) {
+    if (node === null) return 0;
+    let heightLeft = this.height(node.left);
+    let heightRight = this.height(node.right);
+    return Math.max(heightLeft, heightRight) + 1;
+  }
+  // Traverse tree, looking for node and increament depth counter each jump
+  depth(node, root = this.root, depth = 0) {
+    if (root === null) return depth;
+    if (node === root) return depth;
+    if (node.data < root.data) {
+      depth++;
+      return this.depth(node, root.left, depth);
+    } else {
+      depth++;
+      return this.depth(node, root.right, depth);
+    }
+  }
+  // Check if tree is balanced by comparing left and right subtree
+  isBalanced(root = this.root) {
+    if (root === null) return true;
+    if (Math.abs(this.height(root.left) - this.height(root.right)) <= 1) {
+      if (this.isBalanced(root.left)) return true;
+      if (this.isBalanced(root.right)) return true;
+    }
+    return false;
+  }
 }
