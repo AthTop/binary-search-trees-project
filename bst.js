@@ -54,12 +54,10 @@ export default class Tree {
       }
       // Similarilly, check if data is bigger and check the right side as above
     } else {
-      if (root.right > root.data) {
-        if (root.right === null) {
-          root.right = new Node(data);
-        } else {
-          this.insert(data, root.right);
-        }
+      if (root.right === null) {
+        root.right = new Node(data);
+      } else {
+        this.insert(data, root.right);
       }
     }
   }
@@ -114,7 +112,6 @@ export default class Tree {
       throw new Error("Callback function is required");
     }
     // Base Case
-    if (root === null) return;
     if (queue.length === 0) return;
     // Remove the first node in the queue
     let node = queue.shift();
@@ -189,13 +186,23 @@ export default class Tree {
       return this.depth(node, root.right, depth);
     }
   }
-  // Check if tree is balanced by comparing left and right subtree
+  // Check if tree is balanced by comparing left and right subtree and calculate their height difference
   isBalanced(root = this.root) {
     if (root === null) return true;
-    if (Math.abs(this.height(root.left) - this.height(root.right)) <= 1) {
-      if (this.isBalanced(root.left)) return true;
-      if (this.isBalanced(root.right)) return true;
+    if (!(Math.abs(this.height(root.left) - this.height(root.right)) <= 1)) {
+      return false;
     }
-    return false;
+    if (!this.isBalanced(root.left) || !this.isBalanced(root.right)) {
+      return false;
+    }
+    return true;
+  }
+  // Rebalances tree by putting current tree, sorted, in an array and makes a new tree from it
+  rebalance() {
+    let tempArray = [];
+    this.inOrder((node) => {
+      if (node) tempArray.push(node.data);
+    });
+    this.root = this.buildTree(tempArray, 0, tempArray.length - 1);
   }
 }
